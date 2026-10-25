@@ -28,13 +28,22 @@ PROVIDERS = {
 
 
 def _load_dotenv():
-    """尝试读取项目根目录的 .env 文件（存在才加载，不存在忽略）。"""
-    try:
-        from dotenv import load_dotenv
+    """读取项目根目录的 .env 文件（格式 KEY=VALUE），写入环境变量。
 
-        load_dotenv()
-    except ImportError:
-        pass
+    用标准库实现，不依赖 python-dotenv，减少安装步骤。
+    """
+    env_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"
+    )
+    if not os.path.exists(env_path):
+        return
+    with open(env_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip())
 
 
 def chat(prompt, system="你是网络工程专家，回答简洁、专业、可操作。", provider="deepseek"):
