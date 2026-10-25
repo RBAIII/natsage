@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# API Key（重要：永远不要上传到 GitHub）
+.env
+
+# 生成的输出文件
+topo.mmd
+topo.png
+outputs/
